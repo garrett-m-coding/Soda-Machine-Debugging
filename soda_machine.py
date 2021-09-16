@@ -50,10 +50,10 @@ class SodaMachine:
 
     def calculate_transaction(self, customer_payment, selected_soda, customer):
         total_payment_value = self.calculate_coin_value(customer_payment)
-        if total_payment_value < selected_soda.price:
+        if total_payment_value > selected_soda.price:
             change_value = self.determine_change_value(total_payment_value, selected_soda.price)
             customer_change = self.gather_change_from_register(change_value)
-            if customer_change is None:
+            if len(customer_change) > 0:
                 user_interface.output_text(f'Dispensing ${total_payment_value} back to customer')
                 customer.add_coins_to_wallet(customer_payment)
                 self.return_inventory(selected_soda)
@@ -74,17 +74,17 @@ class SodaMachine:
     def gather_change_from_register(self, change_value):
         change_list = []
         while change_value > 0:
-            if change_value >= 0.25 and self.register_has_coin("quarter"):
-                change_list.append(self.get_coin_from_register("quarter"))
+            if change_value >= 0.25 and self.register_has_coin("Quarter"):
+                change_list.append(self.get_coin_from_register("Quarter"))
                 change_value -= 0.25
-            elif change_value >= 0.10 and self.register_has_coin("dime"):
-                change_list.append(self.get_coin_from_register("dime"))
+            elif change_value >= 0.10 and self.register_has_coin("Dime"):
+                change_list.append(self.get_coin_from_register("Dime"))
                 change_value -= 0.10
-            elif change_value >= 0.05 and self.register_has_coin("nickel"):
-                change_list.append(self.get_coin_from_register("nickel"))
+            elif change_value >= 0.05 and self.register_has_coin("Nickel"):
+                change_list.append(self.get_coin_from_register("Nickel"))
                 change_value -= 0.05
-            elif change_value >= 0.01 and self.register_has_coin("penny"):
-                change_list.append(self.get_coin_from_register("penny"))
+            elif change_value >= 0.01 and self.register_has_coin("Penny"):
+                change_list.append(self.get_coin_from_register("Penny"))
                 change_value -= 0.01
             elif change_value == 0:
                 break
