@@ -53,11 +53,11 @@ class SodaMachine:
         if total_payment_value > selected_soda.price:
             change_value = self.determine_change_value(total_payment_value, selected_soda.price)
             customer_change = self.gather_change_from_register(change_value)
-            if len(customer_change) > 0:
+            if customer_change is None:
                 user_interface.output_text(f'Dispensing ${total_payment_value} back to customer')
                 customer.add_coins_to_wallet(customer_payment)
                 self.return_inventory(selected_soda)
-            else:
+            else: #if change_value > 0
                 self.deposit_coins_into_register(customer_payment)
                 customer.add_coins_to_wallet(customer_change)
                 customer.add_can_to_backpack(selected_soda)
@@ -113,7 +113,7 @@ class SodaMachine:
 
     def determine_change_value(self, total_payment, selected_soda_price):
         """Determines amount of change needed by finding difference of payment amount and can price"""
-        return round(selected_soda_price - total_payment, 2)
+        return round(total_payment - selected_soda_price, 2)
 
     def calculate_coin_value(self, coins_list):
         """Takes in a list of coins, returns the monetary value of list."""
@@ -137,4 +137,4 @@ class SodaMachine:
     def deposit_coins_into_register(self, coins_list):
         """Takes in list of coins as argument, adds each coin from list to the register"""
         for coin in coins_list:
-            self.register.append(coins_list)
+            self.register.append(coin)
